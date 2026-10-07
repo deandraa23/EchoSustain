@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1, shrink-to-fit=no"
+    />
+    <title>EchoSustain | ESG Intelligence</title>
+    <!-- Stlite Loader (Streamlit via WebAssembly) -->
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/@stlite/mountable@0.52.0/build/stlite.css"
+    />
+  </head>
+  <body>
+    <div id="root"></div>
+    <script src="https://cdn.jsdelivr.net/npm/@stlite/mountable@0.52.0/build/stlite.js"></script>
+    <script>
+      stlite.mount(
+        {
+          requirements: ["plotly", "pandas", "requests"],
+          entrypoint: "app.py",
+          files: {
+            "app.py": `
+import streamlit as st
+import pandas as pd
+import plotly.graph_objects as go
+import plotly.express as px
+
+st.set_page_config(page_title="EchoSustain | ESG Intelligence", page_icon="🌱", layout="wide")
+
+st.markdown("""
+<style>
+@import url('https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;700&family=Manrope:wght@700;800&display=swap');
+html, body, [class*="css"] { font-family: 'DM Sans', sans-serif; }
+.stApp { background: #f2f5f3; color: #122018; }
+.metric-card {
+    background: #ffffff; border: 1px solid #cbd6ce; border-radius: 14px;
+    padding: 18px 20px; box-shadow: 0 4px 12px rgba(18, 32, 24, 0.04);
+}
+.metric-num { font-size: 2.2rem; font-weight: 800; font-family: 'Manrope', sans-serif; margin-top: 6px; }
+.claim-card {
+    background: #ffffff; border: 1px solid #cbd6ce; border-radius: 12px;
+    padding: 16px 20px; margin-bottom: 12px;
+}
+.claim-card.gw { border-left: 5px solid #b4232c; }
+.claim-card.unv { border-left: 5px solid #9a6208; }
+.claim-card.ver { border-left: 5px solid #116b40; }
+</style>
+""", unsafe_allow_html=True)
+
+with st.sidebar:
+    st.markdown("### 🌱 EchoSustain\\n**ESG INTELLIGENCE**")
+    menu = st.radio("Navigation", ["Overview", "Claim Investigation", "Audits Registry"])
+    st.divider()
+    st.caption("Running Client-Side WebAssembly on GitHub Pages.")
+
+if menu == "Overview":
+    st.title("ESG Compliance Intelligence")
+    st.caption("Fleet-wide ESG compliance posture, greenwashing detection distribution, and disclosure audit indices.")
+    
+    c1, c2, c3, c4 = st.columns(4)
+    with c1: st.markdown('<div class="metric-card"><span style="color:#526158;font-weight:700;font-size:0.8rem;">REPORTS AUDITED</span><div class="metric-num" style="color:#245f9e;">3</div></div>', unsafe_allow_html=True)
+    with c2: st.markdown('<div class="metric-card"><span style="color:#526158;font-weight:700;font-size:0.8rem;">TOTAL CLAIMS</span><div class="metric-num">18</div></div>', unsafe_allow_html=True)
+    with c3: st.markdown('<div class="metric-card"><span style="color:#526158;font-weight:700;font-size:0.8rem;">GREENWASHING</span><div class="metric-num" style="color:#b4232c;">6</div></div>', unsafe_allow_html=True)
+    with c4: st.markdown('<div class="metric-card"><span style="color:#526158;font-weight:700;font-size:0.8rem;">AVG. TRANSPARENCY</span><div class="metric-num" style="color:#116b40;">54%</div></div>', unsafe_allow_html=True)
+
+    st.write("")
+    l, r = st.columns([1, 1.4])
+    with l:
+        fig = go.Figure(data=[go.Pie(labels=["Verified", "Unverified", "Greenwashing"], values=[7, 5, 6], hole=0.68, marker=dict(colors=["#2d9961", "#d69a28", "#c53b3b"]))])
+        fig.update_layout(height=280, margin=dict(l=10, r=10, t=15, b=15), paper_bgcolor="rgba(0,0,0,0)")
+        st.plotly_chart(fig, use_container_width=True)
+    with r:
+        df = pd.DataFrame([{"Report": "AutoCorp ESG 2025.pdf", "Score": 72}, {"Report": "CleanEnergy_BRSR.pdf", "Score": 65}, {"Report": "sample_report.pdf", "Score": 25}])
+        bar = px.bar(df, x="Score", y="Report", orientation="h", range_x=[0, 100], text="Score", color="Score", color_continuous_scale=[[0, "#be123c"], [0.5, "#b45309"], [1, "#0f766e"]])
+        bar.update_layout(height=280, margin=dict(l=10, r=10, t=15, b=15), coloraxis_showscale=False, paper_bgcolor="rgba(0,0,0,0)")
+        st.plotly_chart(bar, use_container_width=True)
+
+elif menu == "Claim Investigation":
+    st.title("Claim Investigation")
+    st.caption("Active Document: sample_report.pdf (Transparency: 25/100)")
+    
+    st.markdown("""
+    <div class="claim-card gw">
+        <span style="font-size:0.75rem;font-weight:800;color:#b4232c;">HIGH RISK · GREENWASHING</span>
+        <div style="font-weight:700;font-size:1.05rem;margin:6px 0;">"Our manufacturing facilities operate with zero net impact on environmental biospheres."</div>
+        <div style="font-size:0.88rem;color:#405247;"><b>Auditor Assessment:</b> Absolute claim made without baseline carbon data, water usage accounting, or accredited verification.</div>
+    </div>
+    <div class="claim-card unv">
+        <span style="font-size:0.75rem;font-weight:800;color:#9a6208;">REVIEW · UNVERIFIED</span>
+        <div style="font-weight:700;font-size:1.05rem;margin:6px 0;">"Targeting 45% Scope 2 reduction by the near future."</div>
+        <div style="font-size:0.88rem;color:#405247;"><b>Auditor Assessment:</b> Ambiguous commitment timeline lacking specific interim milestones or baseline year reference.</div>
+    </div>
+    <div class="claim-card ver">
+        <span style="font-size:0.75rem;font-weight:800;color:#116b40;">COMPLIANT · VERIFIED</span>
+        <div style="font-weight:700;font-size:1.05rem;margin:6px 0;">"On-site solar generation produced 1.2 GWh of verified electricity during FY2025."</div>
+        <div style="font-size:0.88rem;color:#405247;"><b>Auditor Assessment:</b> Substantive metric supported by utility grid interconnect certification.</div>
+    </div>
+    """, unsafe_allow_html=True)
+
+elif menu == "Audits Registry":
+    st.title("Audit Registry")
+    st.write("Historical compliance filings stored in database.")
+    st.dataframe(pd.DataFrame([
+        {"File": "sample_report.pdf", "Score": 25, "Status": "High Risk", "Claims": 5},
+        {"File": "CleanEnergy_BRSR.pdf", "Score": 65, "Status": "Needs Review", "Claims": 8},
+        {"File": "AutoCorp ESG 2025.pdf", "Score": 72, "Status": "Good", "Claims": 5}
+    ]), use_container_width=True)
+`
+          }
+        },
+        document.getElementById("root")
+      );
+    </script>
+  </body>
+</html>
